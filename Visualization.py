@@ -1,8 +1,10 @@
+import matplotlib
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from pandas import DataFrame
 import numpy as np
+import squarify
 
 # Line chart showing the number of Marriages and Divorces per capita in the US between 1867 - 2014
 
@@ -17,7 +19,7 @@ plt.xlabel("Year")
 plt.ylabel("Value per 1000")
 plt.title("US Marriages and Divorces between 1867 - 2014")
 plt.legend()
-# plt.show()
+plt.show()
 plt.gcf().clear()
 
 # Vertical Bar chart showing the number of Marriages and Divorces per capita in the US in 1900, 1950 and 2000
@@ -38,7 +40,7 @@ plt.xlabel("Year")
 plt.ylabel("Value per 1000")
 plt.title("US Marriages and Divorces in 1900, 1950 and 2000")
 plt.legend()
-# plt.show()
+plt.show()
 plt.gcf().clear()
 
 # Horizontal bar chart showing the deadliest Hollywood actors by their kill count
@@ -47,7 +49,7 @@ sns.barplot(x="Count", y="Actor", data=df_Actor_kills)
 plt.xlabel("Kill Count")
 plt.ylabel("Actors")
 plt.yticks(rotation=45)
-# plt.show()
+plt.show()
 plt.gcf().clear()
 
 # Pie chart showing the fraction of all roman emperors who were assassinated
@@ -58,7 +60,7 @@ other_deaths = len(df_Roman) - assassinated_count
 death_counts = [assassinated_count, other_deaths]
 plt.pie(death_counts, labels=["Assassinated", "Other deaths"], autopct='%1.0f%%')
 plt.legend()
-# plt.show()
+plt.show()
 plt.gcf().clear()
 
 # Scatter plot showing the relationship between total revenue earned by arcades and the # of Computer Science PhDs
@@ -71,13 +73,13 @@ df_arcade_CS_year = df_arcade_CS["Year"]
 plt.scatter(df_arcade_revenue, df_arcade_CS_Awards, c=df_arcade_CS_year,)
 plt.xlabel("Total Arcade Revenue (billions)")
 plt.ylabel("Computer Science Doctorates Awarded (US)")
-# plt.show()
+plt.show()
 plt.gcf().clear()
 
 # Histogram showing the distribution of reign lengths of the Roman emperors
-romam_emp_length_of_reigns = df_Roman["Length_of_Reign"]
-plt.hist(romam_emp_length_of_reigns, bins=5)
-# plt.show()
+roman_emp_length_of_reigns = df_Roman["Length_of_Reign"]
+plt.hist(roman_emp_length_of_reigns, bins=5)
+plt.show()
 plt.gcf().clear()
 
 # Box plot to compare the the earnings of recent college graduates
@@ -86,12 +88,11 @@ major_women = df_college_grads.loc[df_college_grads["ShareWomen"] > 0.5]['Median
 major_men = df_college_grads.loc[df_college_grads["ShareWomen"] < 0.5]['Median'].values
 data = [major_women, major_men]
 ax = plt.boxplot(data, notch=True, patch_artist=True, boxprops=dict(facecolor="C0"))
-# ax2.boxplot(major_men, notch=1)
 plt.xticks([1, 2], ['Women', 'Men'])
 plt.title("Earnings of recent college grad (Women vs Men)")
 plt.ylabel("Earnings")
 plt.xlabel("Gender")
-# plt.show()
+plt.show()
 plt.gcf().clear()
 
 
@@ -104,16 +105,12 @@ ax1.set_ylabel("Value per 1000")
 ax2.set_ylabel("Value per 1000")
 ax2.set_xlabel("Year")
 plt.legend()
-# plt.show()
+plt.show()
 plt.gcf().clear()
 
 # Multiple plots
 degree_gender_ratio = pd.read_csv('percent-degrees-conferred-women-usa.csv')
 years = degree_gender_ratio['Year'].values
-# degree_gender_ratios = {}
-
-# for degree in degree_gender_ratio.columns.drop('Year'):
-#     degree_gender_ratios[degree] = degree_gender_ratio[degree].values
 fig = plt.figure(figsize=(24, 12))
 ax = fig.add_subplot(111)
 plt.style.use('seaborn-darkgrid')
@@ -135,5 +132,16 @@ plt.suptitle("Gender Ratio of 17 US College Majors \nbetween 1970-2011?", fontsi
 
 plt.xlabel('Years', ha='center', va='center')
 plt.text(0.06, 0.5, 'Percentage', ha='center', va='center', rotation='vertical', transform=fig.transFigure)
-
 plt.show()
+plt.gcf().clear()
+
+# Tree map of the Actors and their kills
+cmap = matplotlib.cm.Reds
+mini = min(df_Actor_kills["Count"])
+maxi = max(df_Actor_kills["Count"])
+norm = matplotlib.colors.Normalize(vmin=mini, vmax=maxi)
+colors = [cmap(norm(value)) for value in df_Actor_kills["Count"]]
+squarify.plot(sizes=df_Actor_kills["Count"], label=df_Actor_kills["Actor"], color=colors, alpha=0.7)
+plt.axis('off')
+plt.show()
+plt.gcf().clear()
